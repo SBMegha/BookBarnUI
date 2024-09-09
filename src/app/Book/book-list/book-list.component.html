@@ -1,0 +1,87 @@
+<div class="container-fluid">
+  <button (click)="AddBook()">Add book</button>
+  <div class="row">
+    <!-- Sidebar: Search and Filter -->
+    <div class="col-md-4 col-lg-3 bg-light p-3">
+      <h3>Search</h3>
+      <form (ngSubmit)="searchBooks(searchTerm.value)">
+        <input 
+          type="text" 
+          #searchTerm 
+          placeholder="Search by title, author, or category" 
+          class="form-control mb-2" 
+        />
+        <button type="submit" class="btn btn-warning btn-lg mt-3">Search</button>
+      </form>
+  
+      <h3 class="mt-4">Select Category:</h3>
+      <form (ngSubmit)="filterBooksByCategory(selectedCategory)">
+        <select 
+          [(ngModel)]="selectedCategory"
+          name="category" 
+          class="form-select mb-3">
+          <option value="" disabled>Select Category</option>
+          <option *ngFor="let category of categories" [value]="category.categoryId">{{ category.categoryName }}</option>
+        </select>
+        <button type="submit" class="btn btn-warning btn-lg mt-3" [disabled]="selectedCategory==0">Filter</button>
+      </form>
+    </div>
+
+    <!-- Book List Cards -->
+    <div class="col-md-8 col-lg-9">
+      <!-- <div *ngIf="books.length === 0" class="col-12">
+        <p>No books found.</p>
+      </div> -->
+
+      <div *ngFor="let book of books; let i = index" class="card mb-4" [ngClass]="{'mt-5': i === 0}">
+        <div class="row g-0">
+          <!-- Book Image -->
+          <div class="col-md-4">
+            <img 
+              class="img-thumbnail" 
+              [src]="book.image" 
+              alt="{{book.title}} cover image" 
+
+            />
+          </div>
+
+          <!-- Book Details -->
+          <div class="col-md-8 d-flex align-items-center">
+            <div class="card-body">
+              <h5 class="card-title">{{ book.title }}</h5>
+              <p class="card-text"><strong>Author:</strong> {{ book.authorName }}</p>
+              <p class="card-text">{{ book.description }}</p>
+              <p class="card-text"><strong>Price:</strong>₹{{ book.price }}</p>
+
+              <!-- Add to Wishlist, Rating, and Buy Now Button -->
+              <div class="d-flex justify-content-between align-items-center">
+                <button class="btn btn-outline-secondary">Add to Wishlist</button>
+                
+                <div>
+                  <strong>Rating: </strong>
+                  <span class="text-warning">{{ book.averageRating }}★</span>
+                  <span *ngIf="book.availableBookCount > 0; else outOfStock">(In Stock)</span>
+                  <ng-template #outOfStock>(Out of Stock)</ng-template>
+                </div>
+                
+                <button [routerLink]="['/buy', book.bookId]" class="btn btn-warning btn-lg mt-3" [disabled]="book.availableBookCount<= 0">Buy Now</button>
+                <!-- Link to Book Detail -->
+                <a [routerLink]="['/books', book.bookId]" class="btn btn-link">View Details</a>                 
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pagination -->
+    <div>
+      <button (click)="loadBooks(currentPage-1)" [disabled]="currentPage<2">Previous</button>
+      <p>{{currentPage}}</p>
+      <button (click)="loadBooks(currentPage+1)" [disabled]="currentPage===totalpages">Next</button>
+    </div>
+  </div>
+</div>
+
+<!-- Pagination controls -->
+<app-pagination></app-pagination>

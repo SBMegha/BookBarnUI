@@ -1,0 +1,41 @@
+<div *ngIf="book; else loading">
+  <div class="container mt-4">
+    <!-- Back Button -->
+    <button class="btn btn-warning btn-lg mt-3" (click)="goBack()">Back to Book List</button>
+
+    <div class="row">
+      <div class="col-md-4">
+        <img 
+          [src]="book.image" 
+          alt="{{book.title}} cover image" 
+          class="img-fluid rounded" 
+          style="height: 300px; object-fit: cover;"
+        />
+      </div>
+      <div class="col-md-8">
+        <h1>{{ book.title }}</h1>
+        <p><strong>Author:</strong> {{ book.authorName }}</p>
+        <p><strong>Description:</strong> {{ book.description }}</p>
+        <p><strong>Price:</strong> ₹{{ book.price }}</p>
+        <p><strong>Category:</strong> {{ book.categoryName }}</p>
+        <p>
+          <strong>Rating:</strong> 
+          <span class="text-warning"> {{ book.averageRating }} ★</span>
+        </p>
+        <p>
+          <strong>Status:</strong> 
+          <span *ngIf="book.availableBookCount > 0; else outOfStock">(In Stock)</span>
+          <ng-template #outOfStock>Out of Stock</ng-template>
+        </p>
+        <div class="d-flex">
+          <button class="btn btn-outline-secondary me-2">Add to Wishlist</button>
+          <button class="btn btn-warning btn-lg" [disabled]="book.availableBookCount<= 0">Buy Now</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #loading>
+  <p>Loading...</p>
+</ng-template>

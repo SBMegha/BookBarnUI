@@ -1,0 +1,102 @@
+<div class="container mt-5">
+    <h2 class="mb-4">Add Book</h2>
+    <form [formGroup]="reactiveForm" (ngSubmit)="onSubmit()">
+        <div class="container">
+
+            <div class="mb-3">
+                <label for="title" class="form-label">Title:</label>
+                <input type="text" class="form-control" id="title" placeholder="Enter Title" formControlName="title"
+                    [class.is-invalid]="title?.invalid && title?.touched">
+                <div *ngIf="title?.invalid && title?.touched">
+                    <small class="text-danger" *ngIf="title?.hasError('required')">*Title is required</small>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="description" class="form-label">Description:</label>
+                <textarea id="description" class="form-control" placeholder="Enter Description"
+                    formControlName="description"
+                    [class.is-invalid]="description?.invalid && description?.touched"></textarea>
+                <div *ngIf="description?.invalid && description?.touched">
+                    <small class="text-danger" *ngIf="description?.hasError('required')">*Description is
+                        required</small>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="price" class="form-label">Price:</label>
+                <input type="number" class="form-control" id="price" placeholder="Enter Price" formControlName="price"
+                    [class.is-invalid]="price?.invalid && price?.touched">
+                <div *ngIf="price?.invalid && price?.touched">
+                    <small class="text-danger" *ngIf="price?.hasError('required')">*Price is required</small>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="coverImageUrl" class="form-label">Image :</label>
+                <input type="file" class="form-control" id="coverImageUrl" accept="image/*"
+                    formControlName="coverImageUrl" (change)="convertToBase64($event)"
+                    [class.is-invalid]="coverImageUrl?.invalid && coverImageUrl?.touched">
+                <div *ngIf="coverImageUrl?.invalid && coverImageUrl?.touched">
+                    <small class="text-danger" *ngIf="coverImageUrl?.hasError('required')">*Image is required</small>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="averageRating" class="form-label">Average Rating:</label>
+                <input type="number" class="form-control" id="averageRating" placeholder="Enter average rating"
+                    formControlName="averageRating"
+                    [class.is-invalid]="averageRating?.invalid && averageRating?.touched">
+                <div *ngIf="averageRating?.invalid && averageRating?.touched">
+                    <small class="text-danger" *ngIf="averageRating?.hasError('required')">*Average rating is
+                        required</small>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="availableBookCount" class="form-label">Number of books avaialable:</label>
+                <input type="number" class="form-control" id="availableBookCount"
+                    placeholder="Enter number of books available" formControlName="availableBookCount"
+                    [class.is-invalid]="availableBookCount?.invalid && availableBookCount?.touched">
+                <div *ngIf="availableBookCount?.invalid && availableBookCount?.touched">
+                    <small class="text-danger" *ngIf="availableBookCount?.hasError('required')">*Book count is
+                        required</small>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="author">Author:</label>
+                <select id="author" class="form-control" formControlName="authorId" (change)="onAuthorChange()">
+                    <option value="" disabled selected>Select author</option>
+                    @for (author of authors; track $index)
+                    {
+                    <option [value]="author.authorId" style="color: black;">{{author.authorName}}</option>
+                    }
+                    <option value="other">Other</option>
+                </select>
+                <div *ngIf="reactiveForm.get('authorId')?.value === 'other'">
+                    <label for="newAuthorName">New Author Name:</label>
+                    <input type="text" id="newAuthorName" class="form-control" formControlName="authorName">
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="category">Category:</label>
+                <select id="category" class="form-control" formControlName="categoryId" (change)="onCategoryChange()">
+                    <option value="" disabled selected>Select category</option>
+                    @for (category of categories; track $index)
+                    {
+                    <option [value]="category.categoryId" style="color: black;">{{ category.categoryName }}</option>
+                    }
+                    <option value="other">Other</option>
+                </select>
+                <div *ngIf="showCategoryInput">
+                    <label for="newAuthorName">New Category Name:</label>
+                    <input type="text" id="newAuthorName" class="form-control" formControlName="authorName">
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+    </form>
+</div>
